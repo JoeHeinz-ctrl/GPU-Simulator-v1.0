@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NVIDIA Quantum Compute Studio</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="logo">
+                <i class="fas fa-microchip"></i>
+                <span>NVIDIA Quantum</span>
+            </div>
+        </div>
+        <div class="nav-menu">
+            <a href="#" class="nav-item active">Compute Studio</a>
+            <a href="#" class="nav-item">Analytics</a>
+            <a href="#" class="nav-item">Documentation</a>
+            <div class="nav-profile">
+                <div style="width: 40px; height: 40px; background: #76B900; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">U</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h4><i class="fas fa-rocket"></i> Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="quick-action" data-action="benchmark">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Benchmark Suite</span>
+                    </button>
+                    <button class="quick-action" data-action="optimize">
+                        <i class="fas fa-magic"></i>
+                        <span>Auto Optimize</span>
+                    </button>
+                    <button class="quick-action" data-action="export">
+                        <i class="fas fa-download"></i>
+                        <span>Export Results</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h4><i class="fas fa-chart-line"></i> Live Metrics</h4>
+                <div class="live-metrics">
+                    <div class="metric">
+                        <span class="metric-label">GPU Utilization</span>
+                        <div class="metric-bar">
+                            <div class="metric-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="metric-value">0%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Memory Usage</span>
+                        <div class="metric-bar">
+                            <div class="metric-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="metric-value">0 GB</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Compute Cores</span>
+                        <div class="metric-value" id="active-cores">0/8</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">Quantum Parallel</span>
+                        <span class="hero-subtitle">Compute Engine</span>
+                    </h1>
+                    <p class="hero-description">
+                        Enterprise-grade parallel computing simulation platform powered by NVIDIA CUDA architecture
+                    </p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <div class="stat-number" id="total-operations">0</div>
+                            <div class="stat-label">Operations/sec</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number" id="speedup-ratio">1.0x</div>
+                            <div class="stat-label">Speedup Ratio</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number" id="efficiency-score">0%</div>
+                            <div class="stat-label">Efficiency</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Control Panel -->
+            <section class="control-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-sliders-h"></i> Simulation Configuration</h2>
+                    <div class="panel-actions">
+                        <button class="btn-icon" title="Reset Configuration">
+                            <i class="fas fa-undo"></i>
+                        </button>
+                        <button class="btn-icon" title="Save Preset">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="control-grid">
+                    <div class="control-card">
+                        <label class="control-label">
+                            <i class="fas fa-database"></i>
+                            Dataset Configuration
+                        </label>
+                        <div class="control-input">
+                            <select id="dataset-size" class="premium-select">
+                                <option value="10000">10K Elements - Development</option>
+                                <option value="50000" selected>50K Elements - Standard</option>
+                                <option value="100000">100K Elements - Professional</option>
+                                <option value="500000">500K Elements - Enterprise</option>
+                            </select>
+                            <div class="select-indicator"></div>
+                        </div>
+                        <div class="control-info">
+                            <span class="info-badge" id="memory-estimate">~400 KB</span>
+                        </div>
+                    </div>
+
+                    <div class="control-card">
+                        <label class="control-label">
+                            <i class="fas fa-calculator"></i>
+                            Compute Operation
+                        </label>
+                        <div class="control-input">
+                            <select id="operation" class="premium-select">
+                                <option value="vector_add">Vector Addition - O(n)</option>
+                                <option value="vector_multiply">Vector Multiplication - O(n)</option>
+                                <option value="dot_product">Dot Product - O(n)</option>
+                                <option value="matrix_multiply">Matrix Multiplication - O(n³)</option>
+                            </select>
+                            <div class="select-indicator"></div>
+                        </div>
+                        <div class="control-info">
+                            <span class="info-badge" id="complexity-badge">Linear Complexity</span>
+                        </div>
+                    </div>
+
+                    <div class="control-card">
+                        <label class="control-label">
+                            <i class="fas fa-microchip"></i>
+                            Execution Pipeline
+                        </label>
+                        <div class="execution-buttons">
+                            <button id="generate-data" class="btn-primary">
+                                <i class="fas fa-play-circle"></i>
+                                <span>Initialize Dataset</span>
+                                <div class="btn-glow"></div>
+                            </button>
+                            <button id="run-cpu" class="btn-secondary">
+                                <i class="fas fa-server"></i>
+                                <span>CPU Baseline</span>
+                            </button>
+                            <button id="run-gpu" class="btn-accent">
+                                <i class="fas fa-bolt"></i>
+                                <span>GPU Accelerated</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Dashboard -->
+            <section class="results-dashboard">
+                <div class="dashboard-grid">
+                    <!-- Execution Console -->
+                    <div class="dashboard-card console-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-terminal"></i> Execution Console</h3>
+                            <div class="console-controls">
+                                <button class="console-btn" title="Clear Console">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="console-btn" title="Export Log">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="console-content">
+                            <div id="execution-results" class="console-output">
+                                <div class="console-line">
+                                    <span class="console-prompt">nvidia@quantum:~$</span>
+                                    <span class="console-text">System ready. Initialize dataset to begin simulation.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Analytics -->
+                    <div class="dashboard-card analytics-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-bar"></i> Performance Analytics</h3>
+                            <div class="analytics-tabs">
+                                <button class="tab-btn active" data-tab="metrics">Metrics</button>
+                                <button class="tab-btn" data-tab="comparison">Compare</button>
+                            </div>
+                        </div>
+                        <div class="analytics-content">
+                            <div id="performance-metrics" class="metrics-display">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-stopwatch"></i>
+                                    </div>
+                                    <div class="metric-data">
+                                        <div class="metric-title">Execution Time</div>
+                                        <div class="metric-number">--</div>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-rocket"></i>
+                                    </div>
+                                    <div class="metric-data">
+                                        <div class="metric-title">Speedup Factor</div>
+                                        <div class="metric-number">--</div>
+                                    </div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-gauge-high"></i>
+                                    </div>
+                                    <div class="metric-data">
+                                        <div class="metric-title">Throughput</div>
+                                        <div class="metric-number">--</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visualization Section -->
+            <section class="visualization-section">
+                <div class="viz-grid">
+                    <!-- Performance Charts -->
+                    <div class="viz-card chart-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-line"></i> Performance Comparison</h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-chart="time">Time</button>
+                                <button class="chart-btn" data-chart="speedup">Speedup</button>
+                                <button class="chart-btn" data-chart="efficiency">Efficiency</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="time-chart"></canvas>
+                            <canvas id="speedup-chart" style="display: none;"></canvas>
+                            <canvas id="efficiency-chart" style="display: none;"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Thread Block Visualization -->
+                    <div class="viz-card thread-viz-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-cubes"></i> Parallel Architecture</h3>
+                            <div class="thread-controls">
+                                <div class="thread-info">
+                                    <span id="thread-count">0 Blocks</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="thread-visualization">
+                            <div id="thread-block-viz" class="thread-grid">
+                                <div class="thread-placeholder">
+                                    <i class="fas fa-microchip"></i>
+                                    <p>Execute GPU simulation to visualize thread blocks</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Processing quantum calculations...</div>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-text">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
