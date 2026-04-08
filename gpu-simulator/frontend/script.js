@@ -1541,3 +1541,179 @@ class QuantumComputeStudio {
 document.addEventListener('DOMContentLoaded', () => {
     new QuantumComputeStudio();
 });
+
+
+// ============================================
+// COA DEMONSTRATION FUNCTIONALITY
+// ============================================
+
+class COADemonstration {
+    constructor(studio) {
+        this.studio = studio;
+        this.initializeEventListeners();
+    }
+
+    initializeEventListeners() {
+        // Navigation between pages
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = e.target.dataset.page;
+                this.switchPage(page);
+            });
+        });
+
+        // CO demo buttons
+        document.querySelectorAll('.co-demo-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const co = e.target.closest('.co-demo-btn').dataset.co;
+                if (co === 'all') {
+                    this.runAllDemos();
+                } else {
+                    this.runCODemo(co);
+                }
+            });
+        });
+    }
+
+    switchPage(page) {
+        // Update navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.toggle('active', item.dataset.page === page);
+        });
+
+        // Show/hide pages
+        const computePage = document.querySelector('.content > section, .content > .results-dashboard, .content > .visualization-section');
+        const coaPage = document.getElementById('coa-page');
+
+        if (page === 'coa') {
+            // Hide compute studio sections
+            document.querySelectorAll('.content > section:not(#coa-page), .content > .results-dashboard, .content > .visualization-section').forEach(el => {
+                el.style.display = 'none';
+            });
+            coaPage.style.display = 'block';
+        } else if (page === 'compute') {
+            // Show compute studio sections
+            document.querySelectorAll('.content > section:not(#coa-page), .content > .results-dashboard, .content > .visualization-section').forEach(el => {
+                el.style.display = '';
+            });
+            coaPage.style.display = 'none';
+        }
+    }
+
+    async runCODemo(coNumber) {
+        const btn = document.querySelector(`.co-demo-btn[data-co="${coNumber}"]`);
+        const output = document.getElementById(`${coNumber}-output`);
+
+        // Set loading state
+        btn.disabled = true;
+        btn.classList.add('loading');
+        btn.innerHTML = '<i class="fas fa-spinner"></i><span>Running...</span>';
+
+        // Show output area
+        output.style.display = 'block';
+        output.innerHTML = '<div class="co-output-header">Running ' + coNumber.toUpperCase() + ' Demonstration...</div>';
+
+        try {
+            const response = await fetch(`/api/coa-demo/${coNumber}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.displayCOOutput(output, result);
+                this.studio.showNotification(`${coNumber.toUpperCase()} demonstration completed!`, 'success');
+            } else {
+                output.innerHTML += `<div class="co-output-error">Error: ${result.message}</div>`;
+                this.studio.showNotification(`${coNumber.toUpperCase()} demonstration failed`, 'error');
+            }
+        } catch (error) {
+            output.innerHTML += `<div class="co-output-error">Network error: ${error.message}</div>`;
+            this.studio.showNotification('Demo failed', 'error');
+        } finally {
+            // Reset button
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btn.innerHTML = '<i class="fas fa-play-circle"></i><span>Run Demo</span>';
+        }
+    }
+
+    displayCOOutput(outputElement, result) {
+        let html = `<div class="co-output-header">${result.title || 'Demonstration Output'}</div>`;
+
+        if (result.output && Array.isArray(result.output)) {
+            result.output.forEach(line => {
+                const className = this.getOutputLineClass(line);
+                html += `<div class="co-output-line ${className}">${this.escapeHtml(line)}</div>`;
+            });
+        } else if (result.output) {
+            html += `<div class="co-output-line">${this.escapeHtml(result.output)}</div>`;
+        }
+
+        if (result.metrics) {
+            html += '<div class="co-output-header" style="margin-top: 20px;">Performance Metrics</div>';
+            Object.entries(result.metrics).forEach(([key, value]) => {
+                html += `<div class="co-output-line co-output-info">${key}: ${value}</div>`;
+            });
+        }
+
+        if (result.summary) {
+            html += `<div class="co-output-line co-output-success" style="margin-top: 15px; font-weight: bold;">${this.escapeHtml(result.summary)}</div>`;
+        }
+
+        outputElement.innerHTML = html;
+        outputElement.scrollTop = outputElement.scrollHeight;
+    }
+
+    getOutputLineClass(line) {
+        if (line.includes('✓') || line.includes('SUCCESS') || line.includes('completed')) {
+            return 'co-output-success';
+        } else if (line.includes('✗') || line.includes('ERROR') || line.includes('failed')) {
+            return 'co-output-error';
+        } else if (line.includes('⚡') || line.includes('WARNING')) {
+            return 'co-output-warning';
+        } else if (line.includes('[') || line.includes('INFO')) {
+            return 'co-output-info';
+        }
+        return '';
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    async runAllDemos() {
+        const btn = document.querySelector('.co-demo-all-btn');
+        btn.disabled = true;
+        btn.classList.add('loading');
+        btn.innerHTML = '<i class="fas fa-spinner"></i><span>Running All Demos...</span>';
+
+        this.studio.showNotification('Running complete COA demonstration...', 'info');
+
+        const cos = ['co1', 'co2', 'co3', 'co4', 'co5'];
+
+        for (const co of cos) {
+            await this.runCODemo(co);
+            // Small delay between demos
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        btn.disabled = false;
+        btn.classList.remove('loading');
+        btn.innerHTML = '<i class="fas fa-play-circle"></i><span>Run All COs</span>';
+
+        this.studio.showNotification('All COA demonstrations completed!', 'success');
+    }
+}
+
+// Extend the QuantumComputeStudio class to include COA functionality
+const originalConstructor = QuantumComputeStudio;
+QuantumComputeStudio = function() {
+    originalConstructor.call(this);
+    this.coaDemo = new COADemonstration(this);
+};
+QuantumComputeStudio.prototype = originalConstructor.prototype;

@@ -24,9 +24,9 @@
             </div>
         </div>
         <div class="nav-menu">
-            <a href="#" class="nav-item active">Compute Studio</a>
-            <a href="#" class="nav-item">Analytics</a>
-            <a href="#" class="nav-item">Documentation</a>
+            <a href="#" class="nav-item active" data-page="compute">Compute Studio</a>
+            <a href="#" class="nav-item" data-page="coa">COA Demonstration</a>
+            <a href="#" class="nav-item" data-page="analytics">Analytics</a>
             <div class="nav-profile">
                 <div style="width: 40px; height: 40px; background: #76B900; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">U</div>
             </div>
@@ -296,6 +296,108 @@
                     </div>
                 </div>
             </section>
+
+            <!-- COA DEMONSTRATION PAGE (Hidden by default) -->
+            <div id="coa-page" class="page-content" style="display: none;">
+                <!-- COA Hero Section -->
+                <section class="coa-hero">
+                    <div class="coa-hero-content">
+                        <h1 class="coa-title">
+                            <span class="gradient-text">Computer Organization & Architecture</span>
+                            <span class="coa-subtitle">Complete Course Outcomes Demonstration</span>
+                        </h1>
+                        <p class="coa-description">
+                            Interactive demonstration of all 5 Course Outcomes through working GPU simulator
+                        </p>
+                    </div>
+                </section>
+
+                <!-- CO Cards Grid -->
+                <section class="co-cards-grid">
+                    <!-- CO1: Instruction Cycle -->
+                    <div class="co-card" data-co="co1">
+                        <div class="co-header">
+                            <div class="co-number">CO1</div>
+                            <h3>Instruction Cycle Simulation</h3>
+                        </div>
+                        <p class="co-description">Fetch-Decode-Execute cycle with ALU operations</p>
+                        <button class="co-demo-btn" data-co="co1">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Run Demo</span>
+                        </button>
+                        <div class="co-output" id="co1-output" style="display: none;"></div>
+                    </div>
+
+                    <!-- CO2: Performance Evaluation -->
+                    <div class="co-card" data-co="co2">
+                        <div class="co-header">
+                            <div class="co-number">CO2</div>
+                            <h3>Performance Evaluation</h3>
+                        </div>
+                        <p class="co-description">CPU vs GPU comparison with speedup metrics</p>
+                        <button class="co-demo-btn" data-co="co2">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Run Demo</span>
+                        </button>
+                        <div class="co-output" id="co2-output" style="display: none;"></div>
+                    </div>
+
+                    <!-- CO3: Interrupt Handling -->
+                    <div class="co-card" data-co="co3">
+                        <div class="co-header">
+                            <div class="co-number">CO3</div>
+                            <h3>Interrupt Handling</h3>
+                        </div>
+                        <p class="co-description">ISR execution and context switching</p>
+                        <button class="co-demo-btn" data-co="co3">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Run Demo</span>
+                        </button>
+                        <div class="co-output" id="co3-output" style="display: none;"></div>
+                    </div>
+
+                    <!-- CO4: I/O Interfacing -->
+                    <div class="co-card" data-co="co4">
+                        <div class="co-header">
+                            <div class="co-number">CO4</div>
+                            <h3>I/O Interfacing</h3>
+                        </div>
+                        <p class="co-description">Input/Output device simulation with DMA</p>
+                        <button class="co-demo-btn" data-co="co4">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Run Demo</span>
+                        </button>
+                        <div class="co-output" id="co4-output" style="display: none;"></div>
+                    </div>
+
+                    <!-- CO5: GPU Architecture -->
+                    <div class="co-card" data-co="co5">
+                        <div class="co-header">
+                            <div class="co-number">CO5</div>
+                            <h3>GPU Architecture</h3>
+                        </div>
+                        <p class="co-description">Parallel processing with thread blocks</p>
+                        <button class="co-demo-btn" data-co="co5">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Run Demo</span>
+                        </button>
+                        <div class="co-output" id="co5-output" style="display: none;"></div>
+                    </div>
+
+                    <!-- Run All COs -->
+                    <div class="co-card co-card-all">
+                        <div class="co-header">
+                            <div class="co-number"><i class="fas fa-rocket"></i></div>
+                            <h3>Run All Demonstrations</h3>
+                        </div>
+                        <p class="co-description">Execute complete integrated demonstration</p>
+                        <button class="co-demo-btn co-demo-all-btn" data-co="all">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Run All COs</span>
+                        </button>
+                    </div>
+                </section>
+            </div>
         </main>
     </div>
 
