@@ -1,6 +1,46 @@
 # Quick Start Guide
 
-## 🚀 Get Running in 3 Steps
+## 🎓 Two Ways to Use This Project
+
+### Option A: COA Demonstration (For Viva/Learning)
+Run the complete COA modules demonstration covering all 5 Course Outcomes.
+
+### Option B: Web Application (Interactive Simulator)
+Use the web-based GPU simulator with visual interface.
+
+---
+
+## 🎓 Option A: COA Demonstration
+
+### Step 1: Install Dependencies
+```bash
+cd gpu-simulator
+pip install -r requirements.txt
+```
+
+### Step 2: Run Tests (Verify Everything Works)
+```bash
+python test_coa_modules.py
+```
+You should see: "🎉 All tests passed! Project is ready for viva."
+
+### Step 3: Run Integrated Demo
+```bash
+python coa_integrated_demo.py
+```
+
+Choose option 1 for full interactive demo or option 2 for quick demo.
+
+### What You'll See:
+- **CO1**: Instruction Cycle (Fetch-Decode-Execute)
+- **CO2**: Performance Evaluation (CPU vs GPU comparison with charts)
+- **CO3**: Interrupt Handling (ISR and context switching)
+- **CO4**: I/O Interfacing (Input/Output device simulation)
+- **CO5**: GPU Architecture (Parallel processing visualization)
+
+---
+
+## 🚀 Option B: Web Application
 
 ### Step 1: Install Dependencies
 ```bash
