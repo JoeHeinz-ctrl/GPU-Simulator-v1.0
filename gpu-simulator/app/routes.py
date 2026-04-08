@@ -617,3 +617,266 @@ async def auto_optimize():
             status_code=500,
             detail=f"Failed to generate optimization suggestions: {str(e)}"
         )
+
+
+
+# ============================================
+# COA DEMONSTRATION ENDPOINTS
+# ============================================
+
+from .instruction_cycle import InstructionCycleSimulator, Instruction, create_sample_program
+from .interrupt_handler import InterruptHandler, InterruptType, timer_isr, io_complete_isr, user_triggered_isr, error_isr
+
+# Global instances for COA modules
+instruction_simulator = InstructionCycleSimulator()
+interrupt_handler = InterruptHandler()
+
+# Register ISRs
+interrupt_handler.register_isr(InterruptType.TIMER, timer_isr)
+interrupt_handler.register_isr(InterruptType.IO_COMPLETE, io_complete_isr)
+interrupt_handler.register_isr(InterruptType.USER_TRIGGERED, user_triggered_isr)
+interrupt_handler.register_isr(InterruptType.ERROR, error_isr)
+
+
+@router.post("/instruction-cycle")
+async def run_instruction_cycle(num_instructions: int = 5) -> Dict[str, Any]:
+    """
+    CO1: Execute instruction cycle simulation
+    
+    Demonstrates Fetch-Decode-Execute cycle with step-by-step visualization.
+    Educational endpoint for understanding CPU instruction processing.
+    
+    Args:
+        num_instructions: Number of instructions to execute (default: 5)
+        
+    Returns:
+        Complete execution trace with all stages
+    """
+    try:
+        # Create sample program
+        program = create_sample_program()[:num_instructions]
+        
+        # Load and execute
+        instruction_simulator.load_program(program)
+        result = instruction_simulator.run_program()
+        
+        return {
+            "success": True,
+            "co": "CO1",
+            "title": "Instruction Cycle Simulation",
+            "description": "Fetch → Decode → Execute cycle demonstration",
+            **result,
+            "cpu_state": instruction_simulator.get_state()
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Instruction cycle simulation failed: {str(e)}"
+        )
+
+
+@router.post("/instruction-cycle/step")
+async def step_instruction_cycle() -> Dict[str, Any]:
+    """
+    CO1: Execute single instruction step-by-step
+    
+    Returns one complete instruction cycle for animated UI display.
+    
+    Returns:
+        Single instruction execution with all three stages
+    """
+    try:
+        if instruction_simulator.pc >= len(instruction_simulator.memory):
+            return {
+                "success": False,
+                "message": "Program execution complete or no program loaded"
+            }
+        
+        steps = instruction_simulator.execute_single_instruction()
+        
+        return {
+            "success": True,
+            "steps": steps,
+            "cpu_state": instruction_simulator.get_state()
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Step execution failed: {str(e)}"
+        )
+
+
+@router.post("/trigger-interrupt")
+async def trigger_interrupt(
+    interrupt_type: str = "USER_TRIGGERED",
+    data: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
+    """
+    CO3: Trigger an interrupt
+    
+    Simulates interrupt occurrence for demonstration purposes.
+    
+    Args:
+        interrupt_type: Type of interrupt (TIMER, IO_COMPLETE, USER_TRIGGERED, ERROR)
+        data: Optional data associated with interrupt
+        
+    Returns:
+        Interrupt trigger confirmation
+    """
+    try:
+        # Convert string to enum
+        try:
+            int_type = InterruptType[interrupt_type.upper()]
+        except KeyError:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid interrupt type: {interrupt_type}"
+            )
+        
+        result = interrupt_handler.trigger_interrupt(int_type, data)
+        
+        return {
+            "success": True,
+            "co": "CO3",
+            "title": "Interrupt Triggered",
+            **result
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to trigger interrupt: {str(e)}"
+        )
+
+
+@router.post("/handle-interrupt")
+async def handle_interrupt(current_state: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """
+    CO3: Handle pending interrupt with context switching
+    
+    Demonstrates complete interrupt handling cycle including:
+    - Context save
+    - ISR execution
+    - Context restore
+    
+    Args:
+        current_state: Current CPU state (PC, accumulator, registers)
+        
+    Returns:
+        Complete interrupt handling trace
+    """
+    try:
+        if current_state is None:
+            current_state = {
+                "pc": 0,
+                "accumulator": 0.0,
+                "registers": {}
+            }
+        
+        result = await interrupt_handler.handle_interrupt(current_state)
+        
+        return {
+            "success": True,
+            "co": "CO3",
+            "title": "Interrupt Handling",
+            "description": "Context switching and ISR execution",
+            **result,
+            "handler_status": interrupt_handler.get_status()
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Interrupt handling failed: {str(e)}"
+        )
+
+
+@router.get("/interrupt-status")
+async def get_interrupt_status() -> Dict[str, Any]:
+    """
+    CO3: Get interrupt handler status
+    
+    Returns current state of interrupt system.
+    
+    Returns:
+        Interrupt handler status information
+    """
+    try:
+        status = interrupt_handler.get_status()
+        
+        return {
+            "success": True,
+            "co": "CO3",
+            **status
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get interrupt status: {str(e)}"
+        )
+
+
+@router.get("/thread-visualization")
+async def get_thread_visualization(dataset_size: int = 50000) -> Dict[str, Any]:
+    """
+    CO5: Get enhanced thread block visualization data
+    
+    Returns detailed thread block mapping for UI visualization.
+    
+    Args:
+        dataset_size: Size of dataset to visualize
+        
+    Returns:
+        Thread block structure and mapping information
+    """
+    try:
+        if dataset_size not in workload_generator.get_supported_sizes():
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unsupported dataset size. Use one of: {workload_generator.get_supported_sizes()}"
+            )
+        
+        thread_info = gpu_simulator.get_thread_block_info(dataset_size)
+        
+        # Enhanced visualization data
+        blocks = []
+        for i in range(thread_info.num_blocks):
+            block_data = {
+                "block_id": i,
+                "thread_count": thread_info.process_distribution[i] if i < len(thread_info.process_distribution) else thread_info.block_size,
+                "start_index": i * thread_info.block_size,
+                "end_index": min((i + 1) * thread_info.block_size, dataset_size),
+                "status": "ready"
+            }
+            blocks.append(block_data)
+        
+        return {
+            "success": True,
+            "co": "CO5",
+            "title": "GPU Thread Block Visualization",
+            "num_blocks": thread_info.num_blocks,
+            "block_size": thread_info.block_size,
+            "total_elements": thread_info.total_elements,
+            "num_processes": gpu_simulator.num_processes,
+            "blocks": blocks,
+            "architecture": {
+                "grid_dim": thread_info.num_blocks,
+                "block_dim": thread_info.block_size,
+                "total_threads": thread_info.num_blocks * thread_info.block_size,
+                "warp_size": 32,  # Typical GPU warp size
+                "warps_per_block": thread_info.block_size // 32
+            }
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get thread visualization: {str(e)}"
+        )

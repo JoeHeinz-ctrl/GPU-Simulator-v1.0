@@ -296,6 +296,148 @@
                     </div>
                 </div>
             </section>
+
+            <!-- CO1: Instruction Cycle Panel -->
+            <section class="coa-panel" id="co1-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-microchip"></i> CO1: Instruction Cycle Simulation</h2>
+                    <span class="co-badge">Fetch → Decode → Execute</span>
+                </div>
+                <div class="coa-content">
+                    <div class="coa-controls">
+                        <button id="run-instruction-cycle" class="btn-coa">
+                            <i class="fas fa-play"></i>
+                            <span>Run Instruction Cycle</span>
+                        </button>
+                        <button id="step-instruction" class="btn-coa-secondary">
+                            <i class="fas fa-step-forward"></i>
+                            <span>Step Through</span>
+                        </button>
+                        <div class="coa-status">
+                            <span class="status-label">PC:</span>
+                            <span id="pc-value" class="status-value">0</span>
+                            <span class="status-label">ACC:</span>
+                            <span id="acc-value" class="status-value">0.0</span>
+                        </div>
+                    </div>
+                    <div class="instruction-stages">
+                        <div class="stage-box" id="fetch-stage">
+                            <div class="stage-icon"><i class="fas fa-download"></i></div>
+                            <div class="stage-title">FETCH</div>
+                            <div class="stage-content">Waiting...</div>
+                        </div>
+                        <div class="stage-arrow">→</div>
+                        <div class="stage-box" id="decode-stage">
+                            <div class="stage-icon"><i class="fas fa-cogs"></i></div>
+                            <div class="stage-title">DECODE</div>
+                            <div class="stage-content">Waiting...</div>
+                        </div>
+                        <div class="stage-arrow">→</div>
+                        <div class="stage-box" id="execute-stage">
+                            <div class="stage-icon"><i class="fas fa-bolt"></i></div>
+                            <div class="stage-title">EXECUTE</div>
+                            <div class="stage-content">Waiting...</div>
+                        </div>
+                    </div>
+                    <div class="instruction-log" id="instruction-log"></div>
+                </div>
+            </section>
+
+            <!-- CO3: Interrupt Handling Panel -->
+            <section class="coa-panel" id="co3-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-bell"></i> CO3: Interrupt Handling</h2>
+                    <span class="co-badge">Context Switching & ISR</span>
+                </div>
+                <div class="coa-content">
+                    <div class="coa-controls">
+                        <button id="trigger-interrupt" class="btn-coa btn-interrupt">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Trigger Interrupt</span>
+                        </button>
+                        <select id="interrupt-type" class="interrupt-select">
+                            <option value="USER_TRIGGERED">User Triggered</option>
+                            <option value="TIMER">Timer Interrupt</option>
+                            <option value="IO_COMPLETE">I/O Complete</option>
+                            <option value="ERROR">Error Interrupt</option>
+                        </select>
+                        <div class="interrupt-status">
+                            <span class="status-indicator" id="interrupt-indicator"></span>
+                            <span id="interrupt-status-text">Interrupts Enabled</span>
+                        </div>
+                    </div>
+                    <div class="interrupt-flow">
+                        <div class="flow-step" id="save-context-step">
+                            <div class="flow-number">1</div>
+                            <div class="flow-title">Save Context</div>
+                            <div class="flow-desc">PC, Registers saved</div>
+                        </div>
+                        <div class="flow-step" id="disable-int-step">
+                            <div class="flow-number">2</div>
+                            <div class="flow-title">Disable Interrupts</div>
+                            <div class="flow-desc">Prevent nesting</div>
+                        </div>
+                        <div class="flow-step" id="execute-isr-step">
+                            <div class="flow-number">3</div>
+                            <div class="flow-title">Execute ISR</div>
+                            <div class="flow-desc">Handle interrupt</div>
+                        </div>
+                        <div class="flow-step" id="restore-context-step">
+                            <div class="flow-number">4</div>
+                            <div class="flow-title">Restore Context</div>
+                            <div class="flow-desc">Resume execution</div>
+                        </div>
+                    </div>
+                    <div class="interrupt-log" id="interrupt-log"></div>
+                </div>
+            </section>
+
+            <!-- CO5: Enhanced Thread Visualization Panel -->
+            <section class="coa-panel" id="co5-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-cubes"></i> CO5: GPU Thread Block Architecture</h2>
+                    <span class="co-badge">Parallel Execution Model</span>
+                </div>
+                <div class="coa-content">
+                    <div class="coa-controls">
+                        <button id="visualize-threads" class="btn-coa">
+                            <i class="fas fa-eye"></i>
+                            <span>Visualize Thread Blocks</span>
+                        </button>
+                        <div class="thread-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Grid Size:</span>
+                                <span id="grid-size" class="stat-value">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Block Size:</span>
+                                <span id="block-size-stat" class="stat-value">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Total Threads:</span>
+                                <span id="total-threads" class="stat-value">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="thread-grid-container">
+                        <div class="thread-grid-header">
+                            <span>Thread Block Grid</span>
+                            <span class="grid-info" id="grid-info">Execute simulation to see thread mapping</span>
+                        </div>
+                        <div id="enhanced-thread-grid" class="enhanced-thread-grid"></div>
+                    </div>
+                    <div class="architecture-info">
+                        <div class="arch-detail">
+                            <i class="fas fa-layer-group"></i>
+                            <span>SIMD Architecture: Single Instruction, Multiple Data</span>
+                        </div>
+                        <div class="arch-detail">
+                            <i class="fas fa-memory"></i>
+                            <span>Memory Hierarchy: Registers → Shared → Global</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 

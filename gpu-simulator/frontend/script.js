@@ -774,6 +774,12 @@ class QuantumComputeStudio {
         
         this.addConsoleMessage('system', `Initializing ${size.toLocaleString()} element dataset for ${operation.replace('_', ' ')}...`);
 
+        // CO4: Simulate I/O Input Operation
+        if (window.coaDemo) {
+            this.addConsoleMessage('info', '[CO4: I/O] Reading configuration from input devices...');
+            await this.simulateDelay(200);
+        }
+
         try {
             const response = await fetch('/api/generate-data', {
                 method: 'POST',
@@ -790,6 +796,11 @@ class QuantumComputeStudio {
                 this.currentData = { size, operation };
                 this.addConsoleMessage('success', `Dataset initialized successfully! Memory usage: ${result.memory_usage_mb}MB`);
                 this.addConsoleMessage('info', `Generation time: ${result.generation_time}s`);
+                
+                // CO4: Simulate I/O Write Operation
+                this.addConsoleMessage('info', '[CO4: I/O] Writing dataset to memory...');
+                await this.simulateDelay(150);
+                this.addConsoleMessage('success', '[CO4: I/O] Dataset stored in memory successfully');
                 
                 // Update hero stats
                 this.updateHeroStat('total-operations', Math.round(size / result.generation_time));
@@ -814,6 +825,12 @@ class QuantumComputeStudio {
         this.setButtonLoading('run-cpu', true);
         this.isProcessing = true;
         this.addConsoleMessage('system', 'Starting CPU baseline simulation...');
+        
+        // CO1: Simulate instruction cycle for CPU operations
+        this.addConsoleMessage('info', '[CO1: Instruction Cycle] Loading CPU instructions...');
+        if (window.coaDemo) {
+            await window.coaDemo.simulateCPUInstructions(this.currentData);
+        }
 
         try {
             const response = await fetch('/api/run-cpu-simulation', {
@@ -837,6 +854,9 @@ class QuantumComputeStudio {
                 // Update analytics display
                 this.updateMetricCard('Execution Time', `${result.execution_time.toFixed(3)}s`);
                 
+                // CO4: Output results
+                this.addConsoleMessage('info', '[CO4: I/O] Displaying results to output device...');
+                
             } else {
                 this.addConsoleMessage('error', `CPU simulation failed: ${result.message}`);
             }
@@ -857,6 +877,15 @@ class QuantumComputeStudio {
         this.setButtonLoading('run-gpu', true);
         this.isProcessing = true;
         this.addConsoleMessage('system', 'Starting GPU accelerated simulation...');
+        
+        // CO5: Visualize thread blocks automatically
+        this.addConsoleMessage('info', '[CO5: GPU Architecture] Creating thread block grid...');
+        if (window.coaDemo) {
+            await window.coaDemo.autoVisualizeThreads(this.currentData.size);
+        }
+        
+        // CO3: Simulate interrupt during GPU execution
+        this.addConsoleMessage('info', '[CO3: Interrupt] Monitoring for interrupts during execution...');
 
         try {
             const response = await fetch('/api/run-gpu-simulation', {
@@ -880,9 +909,21 @@ class QuantumComputeStudio {
                 if (result.thread_block_info) {
                     this.currentData.threadBlockInfo = result.thread_block_info;
                     this.updateThreadBlockVisualization(result.thread_block_info);
+                    
+                    // CO5: Show thread block details
+                    this.addConsoleMessage('info', `[CO5: GPU] Executed across ${result.thread_block_info.num_blocks} thread blocks`);
+                }
+                
+                // CO3: Simulate timer interrupt
+                if (window.coaDemo && Math.random() > 0.5) {
+                    await this.simulateDelay(300);
+                    this.addConsoleMessage('warning', '[CO3: Interrupt] Timer interrupt triggered during execution!');
+                    await window.coaDemo.autoHandleInterrupt();
                 }
                 
                 this.updatePerformanceMetrics();
+                
+                // CO2: Performance evaluation happens automatically in updatePerformanceMetrics
                 
             } else {
                 this.addConsoleMessage('error', `GPU simulation failed: ${result.message}`);
@@ -895,10 +936,17 @@ class QuantumComputeStudio {
         }
     }
 
+    async simulateDelay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     updatePerformanceMetrics() {
         if (this.currentData.cpuTime && this.currentData.gpuTime) {
             const speedup = this.currentData.cpuTime / this.currentData.gpuTime;
             const efficiency = (speedup / 8) * 100; // Assuming 8 cores
+            
+            // CO2: Performance Evaluation - Highlight this is happening
+            this.addConsoleMessage('info', '[CO2: Performance] Calculating speedup and efficiency...');
             
             // Update hero stats with animations
             this.animateCounter('speedup-ratio', speedup, 'x', 1);
@@ -919,9 +967,10 @@ class QuantumComputeStudio {
             
             this.updateCharts();
             
-            // Show performance summary
+            // Show performance summary with CO2 label
             const improvement = ((this.currentData.cpuTime - this.currentData.gpuTime) / this.currentData.cpuTime * 100);
-            this.addConsoleMessage('success', `Performance improvement: ${improvement.toFixed(1)}% faster with GPU acceleration`);
+            this.addConsoleMessage('success', `[CO2: Performance] ${improvement.toFixed(1)}% faster with GPU acceleration`);
+            this.addConsoleMessage('info', `[CO2: Performance] Speedup: ${speedup.toFixed(2)}x, Efficiency: ${efficiency.toFixed(1)}%`);
         }
     }
 
@@ -1539,5 +1588,488 @@ class QuantumComputeStudio {
 
 // Initialize the application when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    new QuantumComputeStudio();
+    window.studioInstance = new QuantumComputeStudio();
+});
+
+
+// ============================================
+// COA DEMONSTRATION FUNCTIONALITY
+// ============================================
+
+class COADemonstrations {
+    constructor(studio) {
+        this.studio = studio;
+        this.initializeEventListeners();
+    }
+
+    initializeEventListeners() {
+        // CO1: Instruction Cycle
+        document.getElementById('run-instruction-cycle')?.addEventListener('click', () => this.runInstructionCycle());
+        document.getElementById('step-instruction')?.addEventListener('click', () => this.stepInstruction());
+
+        // CO3: Interrupt Handling
+        document.getElementById('trigger-interrupt')?.addEventListener('click', () => this.triggerInterrupt());
+
+        // CO5: Thread Visualization
+        document.getElementById('visualize-threads')?.addEventListener('click', () => this.visualizeThreads());
+    }
+
+    // ========== CO1: Instruction Cycle ==========
+    async runInstructionCycle() {
+        const btn = document.getElementById('run-instruction-cycle');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Running...</span>';
+
+        try {
+            const response = await fetch('/api/instruction-cycle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.animateInstructionCycle(result.execution_log);
+                this.updateCPUState(result.cpu_state);
+                this.studio.showNotification('Instruction cycle completed!', 'success');
+            } else {
+                this.studio.showNotification('Instruction cycle failed', 'error');
+            }
+        } catch (error) {
+            console.error('Instruction cycle error:', error);
+            this.studio.showNotification('Network error', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-play"></i><span>Run Instruction Cycle</span>';
+        }
+    }
+
+    // Automatic CO1 simulation during CPU execution
+    async simulateCPUInstructions(currentData) {
+        try {
+            // Map operation to instruction count
+            const instructionMap = {
+                'vector_add': 3,
+                'vector_multiply': 3,
+                'dot_product': 4,
+                'matrix_multiply': 5
+            };
+            
+            const numInstructions = instructionMap[currentData.operation] || 3;
+            
+            const response = await fetch(`/api/instruction-cycle?num_instructions=${numInstructions}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Animate in background
+                this.animateInstructionCycleQuiet(result.execution_log);
+                this.updateCPUState(result.cpu_state);
+            }
+        } catch (error) {
+            console.error('Auto instruction cycle error:', error);
+        }
+    }
+
+    animateInstructionCycleQuiet(executionLog) {
+        // Faster animation for automatic mode
+        executionLog.forEach((step, index) => {
+            setTimeout(() => {
+                this.highlightStage(step.stage);
+                this.updateStageContent(step);
+                if (index % 3 === 2) { // Only log complete instructions
+                    this.addInstructionLog(step);
+                }
+            }, index * 300);
+        });
+    }
+
+    async stepInstruction() {
+        try {
+            const response = await fetch('/api/instruction-cycle/step', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.animateInstructionCycle(result.steps);
+                this.updateCPUState(result.cpu_state);
+            } else {
+                this.studio.showNotification(result.message, 'warning');
+            }
+        } catch (error) {
+            console.error('Step instruction error:', error);
+        }
+    }
+
+    animateInstructionCycle(executionLog) {
+        const logContainer = document.getElementById('instruction-log');
+        
+        executionLog.forEach((step, index) => {
+            setTimeout(() => {
+                // Highlight active stage
+                this.highlightStage(step.stage);
+                
+                // Update stage content
+                this.updateStageContent(step);
+                
+                // Add to log
+                this.addInstructionLog(step);
+            }, index * 800);
+        });
+    }
+
+    highlightStage(stageName) {
+        // Remove active class from all stages
+        document.querySelectorAll('.stage-box').forEach(box => box.classList.remove('active'));
+        
+        // Add active class to current stage
+        const stageMap = {
+            'FETCH': 'fetch-stage',
+            'DECODE': 'decode-stage',
+            'EXECUTE': 'execute-stage'
+        };
+        
+        const stageId = stageMap[stageName];
+        if (stageId) {
+            document.getElementById(stageId)?.classList.add('active');
+        }
+    }
+
+    updateStageContent(step) {
+        const stageMap = {
+            'FETCH': 'fetch-stage',
+            'DECODE': 'decode-stage',
+            'EXECUTE': 'execute-stage'
+        };
+        
+        const stageId = stageMap[step.stage];
+        if (stageId) {
+            const stageBox = document.getElementById(stageId);
+            const contentDiv = stageBox?.querySelector('.stage-content');
+            if (contentDiv) {
+                if (step.stage === 'FETCH') {
+                    contentDiv.textContent = step.instruction || step.message;
+                } else if (step.stage === 'DECODE') {
+                    contentDiv.textContent = `${step.opcode} ${step.operand1}, ${step.operand2}`;
+                } else if (step.stage === 'EXECUTE') {
+                    contentDiv.textContent = step.details?.alu_operation || step.message;
+                }
+            }
+        }
+    }
+
+    addInstructionLog(step) {
+        const logContainer = document.getElementById('instruction-log');
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        entry.innerHTML = `
+            <span class="log-stage">[${step.stage}]</span>
+            <span class="log-message">${step.message}</span>
+        `;
+        logContainer.appendChild(entry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+    updateCPUState(state) {
+        document.getElementById('pc-value').textContent = state.program_counter;
+        document.getElementById('acc-value').textContent = state.accumulator.toFixed(2);
+    }
+
+    // ========== CO3: Interrupt Handling ==========
+    async triggerInterrupt() {
+        const btn = document.getElementById('trigger-interrupt');
+        const interruptType = document.getElementById('interrupt-type').value;
+        
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Triggering...</span>';
+
+        try {
+            // First, trigger the interrupt
+            const triggerResponse = await fetch('/api/trigger-interrupt', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    interrupt_type: interruptType,
+                    data: { source: 'ui', timestamp: Date.now() }
+                })
+            });
+
+            const triggerResult = await triggerResponse.json();
+
+            if (triggerResult.success) {
+                this.studio.showNotification(`Interrupt ${interruptType} triggered!`, 'warning');
+                
+                // Animate interrupt indicator
+                this.animateInterruptIndicator();
+                
+                // Wait a moment, then handle the interrupt
+                setTimeout(async () => {
+                    await this.handleInterrupt();
+                }, 500);
+            }
+        } catch (error) {
+            console.error('Trigger interrupt error:', error);
+            this.studio.showNotification('Failed to trigger interrupt', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Trigger Interrupt</span>';
+        }
+    }
+
+    // Automatic interrupt handling during GPU execution
+    async autoHandleInterrupt() {
+        try {
+            const response = await fetch('/api/handle-interrupt', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    current_state: {
+                        pc: parseInt(document.getElementById('pc-value')?.textContent || 0),
+                        accumulator: parseFloat(document.getElementById('acc-value')?.textContent || 0),
+                        registers: {}
+                    }
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.animateInterruptHandlingQuiet(result.handling_log);
+            }
+        } catch (error) {
+            console.error('Auto interrupt handling error:', error);
+        }
+    }
+
+    animateInterruptHandlingQuiet(handlingLog) {
+        const logContainer = document.getElementById('interrupt-log');
+        
+        const stepMap = {
+            'SAVE_CONTEXT': 'save-context-step',
+            'DISABLE_INTERRUPTS': 'disable-int-step',
+            'EXECUTE_ISR': 'execute-isr-step',
+            'ISR_COMPLETE': 'execute-isr-step',
+            'RESTORE_CONTEXT': 'restore-context-step',
+            'ENABLE_INTERRUPTS': 'restore-context-step'
+        };
+        
+        handlingLog.forEach((logEntry, index) => {
+            setTimeout(() => {
+                // Highlight flow step
+                document.querySelectorAll('.flow-step').forEach(step => step.classList.remove('active'));
+                const stepId = stepMap[logEntry.step];
+                if (stepId) {
+                    document.getElementById(stepId)?.classList.add('active');
+                }
+                
+                // Add to log (only key steps)
+                if (['SAVE_CONTEXT', 'EXECUTE_ISR', 'RESTORE_CONTEXT'].includes(logEntry.step)) {
+                    const entry = document.createElement('div');
+                    entry.className = 'log-entry';
+                    entry.innerHTML = `
+                        <span class="log-stage">[${logEntry.step}]</span>
+                        <span class="log-message">${logEntry.message}</span>
+                    `;
+                    logContainer.appendChild(entry);
+                    logContainer.scrollTop = logContainer.scrollHeight;
+                }
+            }, index * 400);
+        });
+        
+        // Clear active states after animation
+        setTimeout(() => {
+            document.querySelectorAll('.flow-step').forEach(step => step.classList.remove('active'));
+        }, handlingLog.length * 400 + 300);
+    }
+
+    async handleInterrupt() {
+        try {
+            const response = await fetch('/api/handle-interrupt', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    current_state: {
+                        pc: parseInt(document.getElementById('pc-value')?.textContent || 0),
+                        accumulator: parseFloat(document.getElementById('acc-value')?.textContent || 0),
+                        registers: {}
+                    }
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.animateInterruptHandling(result.handling_log);
+                this.studio.showNotification('Interrupt handled successfully!', 'success');
+            }
+        } catch (error) {
+            console.error('Handle interrupt error:', error);
+        }
+    }
+
+    animateInterruptIndicator() {
+        const indicator = document.getElementById('interrupt-indicator');
+        const statusText = document.getElementById('interrupt-status-text');
+        
+        indicator.classList.add('disabled');
+        statusText.textContent = 'Interrupts Disabled';
+        
+        setTimeout(() => {
+            indicator.classList.remove('disabled');
+            statusText.textContent = 'Interrupts Enabled';
+        }, 3000);
+    }
+
+    animateInterruptHandling(handlingLog) {
+        const logContainer = document.getElementById('interrupt-log');
+        logContainer.innerHTML = '';
+        
+        const stepMap = {
+            'SAVE_CONTEXT': 'save-context-step',
+            'DISABLE_INTERRUPTS': 'disable-int-step',
+            'EXECUTE_ISR': 'execute-isr-step',
+            'ISR_COMPLETE': 'execute-isr-step',
+            'RESTORE_CONTEXT': 'restore-context-step',
+            'ENABLE_INTERRUPTS': 'restore-context-step'
+        };
+        
+        handlingLog.forEach((logEntry, index) => {
+            setTimeout(() => {
+                // Highlight flow step
+                document.querySelectorAll('.flow-step').forEach(step => step.classList.remove('active'));
+                const stepId = stepMap[logEntry.step];
+                if (stepId) {
+                    document.getElementById(stepId)?.classList.add('active');
+                }
+                
+                // Add to log
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.innerHTML = `
+                    <span class="log-stage">[${logEntry.step}]</span>
+                    <span class="log-message">${logEntry.message}</span>
+                `;
+                logContainer.appendChild(entry);
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }, index * 600);
+        });
+        
+        // Clear active states after animation
+        setTimeout(() => {
+            document.querySelectorAll('.flow-step').forEach(step => step.classList.remove('active'));
+        }, handlingLog.length * 600 + 500);
+    }
+
+    // ========== CO5: Thread Visualization ==========
+    async visualizeThreads() {
+        const btn = document.getElementById('visualize-threads');
+        const datasetSize = parseInt(document.getElementById('dataset-size')?.value || 50000);
+        
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Visualizing...</span>';
+
+        try {
+            const response = await fetch(`/api/thread-visualization?dataset_size=${datasetSize}`);
+            const result = await response.json();
+
+            if (result.success) {
+                this.renderThreadBlocks(result);
+                this.updateThreadStats(result);
+                this.studio.showNotification('Thread blocks visualized!', 'success');
+            }
+        } catch (error) {
+            console.error('Thread visualization error:', error);
+            this.studio.showNotification('Visualization failed', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-eye"></i><span>Visualize Thread Blocks</span>';
+        }
+    }
+
+    // Automatic thread visualization during GPU execution
+    async autoVisualizeThreads(datasetSize) {
+        try {
+            const response = await fetch(`/api/thread-visualization?dataset_size=${datasetSize}`);
+            const result = await response.json();
+
+            if (result.success) {
+                this.renderThreadBlocks(result, true); // true = auto mode
+                this.updateThreadStats(result);
+            }
+        } catch (error) {
+            console.error('Auto thread visualization error:', error);
+        }
+    }
+
+    renderThreadBlocks(data, autoMode = false) {
+        const gridContainer = document.getElementById('enhanced-thread-grid');
+        gridContainer.innerHTML = '';
+        
+        // Limit blocks shown in auto mode for performance
+        const blocksToShow = autoMode ? Math.min(data.blocks.length, 20) : data.blocks.length;
+        
+        for (let i = 0; i < blocksToShow; i++) {
+            const block = data.blocks[i];
+            const blockElement = document.createElement('div');
+            blockElement.className = 'thread-block-item';
+            blockElement.innerHTML = `
+                <div class="block-id">Block ${block.block_id}</div>
+                <div class="block-threads">${block.thread_count} threads</div>
+            `;
+            
+            // Add animation delay
+            blockElement.style.animationDelay = `${i * 0.05}s`;
+            
+            // Add hover tooltip
+            blockElement.title = `Block ${block.block_id}: Elements ${block.start_index}-${block.end_index}`;
+            
+            // Simulate execution animation
+            setTimeout(() => {
+                blockElement.classList.add('executing');
+                setTimeout(() => {
+                    blockElement.classList.remove('executing');
+                }, autoMode ? 500 : 1000);
+            }, i * (autoMode ? 50 : 100));
+            
+            gridContainer.appendChild(blockElement);
+        }
+        
+        // Show message if blocks were limited
+        if (autoMode && data.blocks.length > blocksToShow) {
+            const moreElement = document.createElement('div');
+            moreElement.className = 'thread-block-item';
+            moreElement.style.background = 'rgba(118, 185, 0, 0.3)';
+            moreElement.innerHTML = `
+                <div class="block-id">+${data.blocks.length - blocksToShow}</div>
+                <div class="block-threads">more blocks</div>
+            `;
+            gridContainer.appendChild(moreElement);
+        }
+        
+        // Update grid info
+        document.getElementById('grid-info').textContent = 
+            `${data.num_blocks} blocks × ${data.block_size} threads = ${data.num_blocks * data.block_size} total threads`;
+    }
+
+    updateThreadStats(data) {
+        document.getElementById('grid-size').textContent = `${data.num_blocks} blocks`;
+        document.getElementById('block-size-stat').textContent = `${data.block_size} threads`;
+        document.getElementById('total-threads').textContent = `${data.num_blocks * data.block_size}`;
+    }
+}
+
+// Initialize COA demonstrations when studio is ready
+document.addEventListener('DOMContentLoaded', () => {
+    // Wait for studio to be initialized
+    setTimeout(() => {
+        if (window.studioInstance) {
+            window.coaDemo = new COADemonstrations(window.studioInstance);
+        }
+    }, 100);
 });

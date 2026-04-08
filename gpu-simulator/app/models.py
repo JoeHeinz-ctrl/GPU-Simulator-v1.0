@@ -183,3 +183,51 @@ DatasetSize = int
 ExecutionTime = float
 SpeedupRatio = float
 ProcessCount = int
+
+
+
+# COA Demonstration Models
+
+class InstructionCycleRequest(BaseModel):
+    """Request model for instruction cycle simulation"""
+    num_instructions: int = Field(default=5, ge=1, le=20, description="Number of instructions to execute")
+
+
+class InstructionCycleResponse(BaseModel):
+    """Response model for instruction cycle simulation"""
+    success: bool
+    co: str = "CO1"
+    title: str
+    description: str
+    total_instructions: int
+    final_pc: int
+    final_accumulator: float
+    execution_log: List[Dict[str, Any]]
+    cpu_state: Dict[str, Any]
+
+
+class InterruptTriggerRequest(BaseModel):
+    """Request model for triggering interrupts"""
+    interrupt_type: str = Field(default="USER_TRIGGERED", pattern="^(TIMER|IO_COMPLETE|USER_TRIGGERED|ERROR)$")
+    data: Optional[Dict[str, Any]] = None
+
+
+class InterruptHandleRequest(BaseModel):
+    """Request model for handling interrupts"""
+    current_state: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Current CPU state (PC, accumulator, registers)"
+    )
+
+
+class ThreadVisualizationResponse(BaseModel):
+    """Response model for thread visualization"""
+    success: bool
+    co: str = "CO5"
+    title: str
+    num_blocks: int
+    block_size: int
+    total_elements: int
+    num_processes: int
+    blocks: List[Dict[str, Any]]
+    architecture: Dict[str, Any]
