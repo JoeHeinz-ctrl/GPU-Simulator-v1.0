@@ -1609,3 +1609,318 @@ body {
         grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
     }
 }
+
+    max-height: 200px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+/* CO5: Thread Visualization Styles */
+.thread-stats {
+    display: flex;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px 20px;
+    border-radius: 8px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #b3b3b3;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #76B900;
+}
+
+.thread-grid-container {
+    margin: 30px 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.thread-grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(118, 185, 0, 0.3);
+}
+
+.thread-grid-header span:first-child {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.grid-info {
+    font-size: 12px;
+    color: #b3b3b3;
+}
+
+.enhanced-thread-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    min-height: 200px;
+}
+
+.thread-block-item {
+    background: linear-gradient(135deg, #76B900, #5a8f00);
+    border-radius: 8px;
+    padding: 15px 10px;
+    text-align: center;
+    color: #ffffff;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease;
+}
+
+.thread-block-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(118, 185, 0, 0.5);
+}
+
+.thread-block-item.executing {
+    animation: pulse 1s ease-in-out;
+    box-shadow: 0 0 20px rgba(118, 185, 0, 0.8);
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.block-id {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.block-threads {
+    font-size: 11px;
+    opacity: 0.8;
+}
+
+.architecture-info {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.arch-detail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border-left: 3px solid #76B900;
+}
+
+.arch-detail i {
+    color: #76B900;
+    font-size: 18px;
+}
+
+.arch-detail span {
+    color: #ffffff;
+    font-size: 13px;
+}
+
+/* COA Panel Base Styles */
+.coa-panel {
+    background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(118, 185, 0, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.coa-panel:hover {
+    border-color: rgba(118, 185, 0, 0.6);
+    box-shadow: 0 15px 50px rgba(118, 185, 0, 0.2);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba(118, 185, 0, 0.3);
+}
+
+.panel-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.panel-header h2 i {
+    color: #76B900;
+}
+
+.co-badge {
+    background: linear-gradient(135deg, #76B900, #5a8f00);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.coa-content {
+    padding: 20px 0;
+}
+
+.coa-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.btn-coa {
+    background: linear-gradient(135deg, #76B900, #5a8f00);
+    color: #ffffff;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(118, 185, 0, 0.3);
+}
+
+.btn-coa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(118, 185, 0, 0.5);
+}
+
+.btn-coa:active {
+    transform: translateY(0);
+}
+
+.btn-coa-secondary {
+    background: rgba(118, 185, 0, 0.2);
+    color: #76B900;
+    border: 2px solid #76B900;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-coa-secondary:hover {
+    background: rgba(118, 185, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-interrupt {
+    background: linear-gradient(135deg, #FF6B6B, #EE5A52);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.btn-interrupt:hover {
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+}
+
+.coa-status {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-left: auto;
+}
+
+.status-label {
+    font-size: 12px;
+    color: #b3b3b3;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-value {
+    font-size: 16px;
+    color: #76B900;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .enhanced-thread-grid {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .coa-panel {
+        padding: 20px;
+    }
+    
+    .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .coa-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .instruction-stages {
+        flex-direction: column;
+    }
+    
+    .stage-arrow {
+        transform: rotate(90deg);
+        margin: 10px 0;
+    }
+    
+    .interrupt-flow {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .enhanced-thread-grid {
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    }
+}
