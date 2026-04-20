@@ -1,0 +1,141 @@
+
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║          GPU SIMULATOR - START HERE! 👈                       ║
+║                                                               ║
+║          Computer Organization and Architecture Project       ║
+║          All 5 Course Outcomes (CO1-CO5) Integrated          ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+
+┌───────────────────────────────────────────────────────────────┐
+│  STEP 1: RUN THE APPLICATION (CHOOSE YOUR SYSTEM)             │
+└───────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────┐
+    │  🪟 WINDOWS USERS                           │
+    │                                             │
+    │  Double-click this file:                    │
+    │  ► setup_and_run.bat                        │
+    │                                             │
+    │  That's it! Everything is automatic.        │
+    └─────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────┐
+    │  🍎 MAC / 🐧 LINUX USERS                    │
+    │                                             │
+    │  Open Terminal in this folder, then run:    │
+    │  ► bash setup_and_run.sh                    │
+    │                                             │
+    │  That's it! Everything is automatic.        │
+    └─────────────────────────────────────────────┘
+
+
+┌───────────────────────────────────────────────────────────────┐
+│  STEP 2: OPEN YOUR BROWSER                                    │
+└───────────────────────────────────────────────────────────────┘
+
+    The script will install everything and start the server.
+    
+    When you see: "Uvicorn running on http://127.0.0.1:8000"
+    
+    Open your browser and go to:
+    
+    ► http://localhost:8000
+    
+
+┌───────────────────────────────────────────────────────────────┐
+│  STEP 3: TRY THE DEMO (2 MINUTES)                             │
+└───────────────────────────────────────────────────────────────┘
+
+    1. Click "Initialize Dataset"
+       → Select size: 50000
+       → Click "Generate"
+       → ✓ CO4 activates (I/O operations)
+
+    2. Click "Run CPU Simulation"
+       → ✓ CO1 activates (Instruction Cycle)
+       → See: Fetch → Decode → Execute
+
+    3. Click "Run GPU Simulation"
+       → ✓ CO5 activates (GPU Architecture)
+       → ✓ CO3 activates (Interrupt Handling)
+       → ✓ CO2 activates (Performance Evaluation)
+
+    4. Check the Console Output
+       → Look for labels: [CO1], [CO2], [CO3], [CO4], [CO5]
+       → All Course Outcomes activate automatically!
+
+    5. View Performance Charts
+       → Speedup comparison (CPU vs GPU)
+       → Efficiency metrics
+       → Throughput analysis
+
+
+┌───────────────────────────────────────────────────────────────┐
+│  WHAT YOU'LL SEE                                              │
+└───────────────────────────────────────────────────────────────┘
+
+    ✓ Interactive web dashboard
+    ✓ Real-time performance charts
+    ✓ Thread block visualization (CO5)
+    ✓ Instruction cycle animation (CO1)
+    ✓ Interrupt handling flow (CO3)
+    ✓ Performance metrics (CO2)
+    ✓ I/O operations (CO4)
+    ✓ Console with labeled CO messages
+    ✓ PDF export functionality
+
+
+┌───────────────────────────────────────────────────────────────┐
+│  NEED HELP?                                                   │
+└───────────────────────────────────────────────────────────────┘
+
+    📄 HOW_TO_RUN.txt       → Detailed instructions
+    📄 SETUP.md             → Setup guide
+    📄 README.md            → Complete documentation
+    📄 PROJECT_SUMMARY.txt  → Project overview
+
+
+┌───────────────────────────────────────────────────────────────┐
+│  SYSTEM REQUIREMENTS                                          │
+└───────────────────────────────────────────────────────────────┘
+
+    ✓ Python 3.8 or higher
+    ✓ 4GB RAM minimum
+    ✓ Modern web browser
+    ✓ Internet (for first-time setup only)
+
+
+┌───────────────────────────────────────────────────────────────┐
+│  TROUBLESHOOTING                                              │
+└───────────────────────────────────────────────────────────────┘
+
+    Problem: "Python is not recognized"
+    → Install Python from: https://www.python.org/
+    → Check "Add Python to PATH" during installation
+
+    Problem: Script doesn't run
+    → See HOW_TO_RUN.txt for manual setup steps
+
+    Problem: Port 8000 already in use
+    → Close other applications
+    → Or edit run_server.py to use different port
+
+
+═══════════════════════════════════════════════════════════════
+  🎓 COURSE OUTCOMES DEMONSTRATED
+═══════════════════════════════════════════════════════════════
+
+  ✓ CO1: Instruction Cycle (Fetch-Decode-Execute)
+  ✓ CO2: Performance Evaluation (Speedup, Efficiency)
+  ✓ CO3: Interrupt Handling (Context Switching, ISR)
+  ✓ CO4: I/O Interfacing (Input/Output Operations)
+  ✓ CO5: GPU Architecture (SIMD, Thread Blocks)
+
+═══════════════════════════════════════════════════════════════
+  Ready to run! Just double-click setup_and_run.bat (Windows)
+  or run: bash setup_and_run.sh (Mac/Linux)
+═══════════════════════════════════════════════════════════════
+
