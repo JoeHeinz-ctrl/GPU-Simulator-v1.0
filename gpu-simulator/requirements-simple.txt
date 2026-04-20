@@ -1,7 +1,0 @@
-# Simplified requirements for GPU Parallel Floating-Point Simulator
-# Use this if the main requirements.txt fails
-
-fastapi
-uvicorn
-numpy
-pydantic
