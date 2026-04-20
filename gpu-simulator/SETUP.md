@@ -1,10 +1,26 @@
 # GPU Simulator - Quick Setup Guide
 
-## Prerequisites
+## 🚀 EASIEST WAY: One-Click Setup (Recommended)
+
+### For Windows:
+**Just double-click:** `setup_and_run.bat`
+
+### For Mac/Linux:
+**Just run:** `bash setup_and_run.sh`
+
+That's it! The script will:
+- ✓ Check Python installation
+- ✓ Install all dependencies automatically
+- ✓ Start the server
+- ✓ Open at http://localhost:8000
+
+---
+
+## 📋 Manual Setup (Alternative Method)
+
+### Prerequisites
 - Python 3.8 or higher
 - pip (Python package manager)
-
-## Installation Steps
 
 ### Step 1: Install Python Dependencies
 Open terminal/command prompt in the project folder and run:

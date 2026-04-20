@@ -1,0 +1,123 @@
+╔════════════════════════════════════════════════════════════╗
+║     GPU SIMULATOR - HOW TO RUN (SUPER SIMPLE!)            ║
+╚════════════════════════════════════════════════════════════╝
+
+OPTION 1: ONE-CLICK SETUP AND RUN (RECOMMENDED)
+================================================
+
+FOR WINDOWS USERS:
+------------------
+1. Double-click: setup_and_run.bat
+2. Wait for installation to complete
+3. Browser will show: http://localhost:8000
+4. Done! ✓
+
+FOR MAC/LINUX USERS:
+--------------------
+1. Open Terminal in this folder
+2. Run: bash setup_and_run.sh
+3. Browser will show: http://localhost:8000
+4. Done! ✓
+
+
+OPTION 2: MANUAL SETUP (IF SCRIPTS DON'T WORK)
+===============================================
+
+Step 1: Install Dependencies
+-----------------------------
+Open Command Prompt/Terminal in this folder and run:
+
+    pip install -r requirements.txt
+
+Step 2: Run the Application
+----------------------------
+    python run_server.py
+
+Step 3: Open Browser
+---------------------
+    http://localhost:8000
+
+
+TROUBLESHOOTING
+===============
+
+Problem: "Python is not recognized"
+Solution: Install Python from https://www.python.org/
+         Make sure to check "Add Python to PATH"
+
+Problem: "pip is not recognized"
+Solution: Reinstall Python with pip included
+
+Problem: Port 8000 already in use
+Solution: Close other applications using port 8000
+         Or edit run_server.py to use different port
+
+Problem: Packages fail to install
+Solution: Check internet connection
+         Try: python -m pip install --upgrade pip
+         Then retry: pip install -r requirements.txt
+
+
+WHAT TO EXPECT
+==============
+
+When you run the application, you will see:
+✓ Installation progress (first time only)
+✓ Server starting message
+✓ "Uvicorn running on http://127.0.0.1:8000"
+✓ Open your browser to http://localhost:8000
+
+The web interface will show:
+✓ GPU Simulator dashboard
+✓ Dataset initialization controls
+✓ CPU/GPU simulation buttons
+✓ All 5 Course Outcomes (CO1-CO5) panels
+✓ Performance charts
+✓ Console output
+
+
+QUICK DEMO
+==========
+
+1. Click "Initialize Dataset"
+   → Select size: 50000
+   → Click "Generate"
+   → Watch CO4 activate (I/O operations)
+
+2. Click "Run CPU Simulation"
+   → Watch CO1 activate (Instruction Cycle)
+   → See Fetch → Decode → Execute
+
+3. Click "Run GPU Simulation"
+   → Watch CO5 activate (GPU threads)
+   → Watch CO3 activate (Interrupts - 50% chance)
+   → Watch CO2 activate (Performance metrics)
+
+4. View Results
+   → Check console for [CO1], [CO2], [CO3], [CO4], [CO5] labels
+   → View performance charts
+   → See speedup and efficiency metrics
+
+
+SYSTEM REQUIREMENTS
+===================
+
+✓ Python 3.8 or higher
+✓ 4GB RAM minimum
+✓ Modern web browser (Chrome, Firefox, Edge, Safari)
+✓ Internet connection (for first-time package installation)
+
+
+NEED HELP?
+==========
+
+See README.md for complete documentation
+See SETUP.md for detailed setup instructions
+See PROJECT_SUMMARY.txt for project overview
+
+
+═══════════════════════════════════════════════════════════
+  Project: GPU Parallel Floating-Point Simulator
+  Course: Computer Organization and Architecture
+  All 5 COs Integrated ✓
+═══════════════════════════════════════════════════════════
