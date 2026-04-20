@@ -1,0 +1,92 @@
+GPU PARALLEL FLOATING-POINT SIMULATOR
+Computer Organization and Architecture Project
+=====================================================
+
+PROJECT OVERVIEW
+----------------
+Educational web application demonstrating all 5 Course Outcomes (CO1-CO5)
+through an interactive GPU parallel computing simulator.
+
+COURSE OUTCOMES COVERED
+-----------------------
+✓ CO1: Instruction Cycle (Fetch-Decode-Execute)
+✓ CO2: Performance Evaluation (Speedup, Efficiency, Throughput)
+✓ CO3: Interrupt Handling (Context Switching, ISR)
+✓ CO4: I/O Interfacing (Input/Output Operations)
+✓ CO5: GPU Architecture (SIMD, Thread Blocks, Parallelism)
+
+TECHNOLOGY STACK
+----------------
+Backend:  Python, FastAPI, NumPy, Multiprocessing
+Frontend: HTML5, CSS3, JavaScript, Chart.js
+Server:   Uvicorn (ASGI)
+
+SETUP INSTRUCTIONS
+------------------
+1. Install dependencies: pip install -r requirements.txt
+2. Run server: python run_server.py
+3. Open browser: http://localhost:8000
+
+For detailed setup instructions, see SETUP.md
+
+PROJECT STRUCTURE
+-----------------
+gpu-simulator/
+├── app/                    # Backend Python code (13 modules)
+│   ├── main.py            # FastAPI application
+│   ├── routes.py          # API endpoints
+│   ├── instruction_cycle.py   # CO1 implementation
+│   ├── interrupt_handler.py   # CO3 implementation
+│   ├── performance.py         # CO2 implementation
+│   └── ...
+├── frontend/              # Frontend files
+│   ├── index.html        # Main UI
+│   ├── style.css         # Styling
+│   └── script.js         # Interactive logic
+├── README.md             # Complete documentation
+├── SETUP.md              # Quick setup guide
+├── requirements.txt      # Python dependencies
+└── run_server.py         # Server startup script
+
+KEY FEATURES
+------------
+• Interactive web interface with real-time visualization
+• Automatic CO activation during simulation workflow
+• Performance comparison charts (CPU vs GPU)
+• Thread block visualization
+• Instruction cycle step-by-step execution
+• Interrupt handling with context switching
+• PDF export functionality
+• Console logging with labeled CO messages
+
+DEMONSTRATION FLOW
+------------------
+1. Initialize Dataset → CO4 activates (I/O operations)
+2. Run CPU Simulation → CO1 activates (instruction cycle)
+3. Run GPU Simulation → CO5, CO3, CO2 activate automatically
+4. View performance charts and metrics
+5. Export results as PDF
+
+DOCUMENTATION
+-------------
+• README.md - Complete project documentation with architecture,
+  API endpoints, technical details, and usage instructions
+• SETUP.md - Quick setup guide for easy installation
+• This file - Project summary for quick reference
+
+SYSTEM REQUIREMENTS
+-------------------
+• Python 3.8 or higher
+• Modern web browser (Chrome, Firefox, Edge, Safari)
+• 4GB RAM minimum
+• Internet connection (for initial package installation)
+
+CONTACT & SUPPORT
+-----------------
+For questions or issues, refer to README.md for detailed
+troubleshooting and technical documentation.
+
+Project Status: Production Ready ✓
+All 5 COs Integrated: Yes ✓
+Web Interface: Functional ✓
+Documentation: Complete ✓
